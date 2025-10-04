@@ -1,6 +1,4 @@
-# EAGer
-
-> **E**ntropy-**A**ware **GE**ne**R**ation for Adaptive Inference-Time Scaling
+# EAGer: **E**ntropy-**A**ware **GE**ne**R**ation for Adaptive Inference-Time Scaling
 
 <div align="center">
 
@@ -61,6 +59,8 @@ python -m src.main_vllm \
     --seed 55
 ```
 
+➡️ `example_execution.sh` provides a simple example to run an experiment following the same format as above.
+
 ---
 
 ## ⚙️ Configuration
@@ -69,14 +69,14 @@ python -m src.main_vllm \
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `--model_name` | HuggingFace model identifier | `openai/gpt-oss-20b` |
-| `--data_name` | HuggingFace dataset identifier | `opencompass/AIME2025` |
-| `--temperature` | Sampling temperature (must be > 0) | `0.6` |
-| `--entropy_threshold` | Branching threshold (~2.0 for EAGer-init, ~2.4 for EAGer) | `2.2` |
-| `--max_sequences` | Maximum parallel sequences (M in paper) | `32` |
-| `--experiments` | Experiment type to run | `eager` |
-| `--output_dir` | Output directory (serves as experiment ID) | See below |
-| `--seed` | Random seed for reproducibility | `55` |
+| `model_name` | HuggingFace model identifier | `openai/gpt-oss-20b` |
+| `data_name` | HuggingFace dataset identifier | `opencompass/AIME2025` |
+| `temperature` | Sampling temperature (must be > 0) | `0.6` |
+| `entropy_threshold` | Branching threshold (~2.0 for EAGer-init, ~2.4 for EAGer) | `2.2` |
+| `max_sequences` | Maximum parallel sequences (M in paper) | `32` |
+| `experiments` | Experiment type to run | `eager` |
+| `output_dir` | Output directory (serves as experiment ID) | See below |
+| `seed` | Random seed for reproducibility | `55` |
 
 ### Supported Models
 
@@ -91,6 +91,7 @@ python -m src.main_vllm \
 
 - `Maxwell-Jia/AIME_2024`
 - `opencompass/AIME2025`
+- `MathArena/hmmt_feb_2025`
 - `fingertap/GPQA-Diamond`
 - `evalplus/humanevalplus`
 
