@@ -1,0 +1,27 @@
+._*
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+.venv/
+.venv*/
+ENV/
+
+.DS_Store
+TMP.ipynb
+
+*.large
+*.json
+outputs*
+
+.nfs*
