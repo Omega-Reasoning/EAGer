@@ -2,6 +2,8 @@
 
 <div align="center">
 
+[📜 **Read the paper here** (coming soon) 📜](https://arxiv.org)
+
 [Daniel Scalena](https://www.danielsc4.it/)<sup>1,2</sup> · [Leonidas Zotos](https://www.rug.nl/staff/l.zotos/?lang=en)<sup>1</sup> · [Elisabetta Fersini](https://en.unimib.it/elisabetta-fersini)<sup>2</sup> · [Malvina Nissim](https://malvinanissim.github.io/)<sup>1</sup> · [Ahmet Üstün](https://ahmetustun.github.io)<sup>3</sup>
 
 <sup>1</sup>University of Groningen · <sup>2</sup>University of Milano-Bicocca · <sup>3</sup>Cohere
@@ -59,7 +61,7 @@ python -m src.main_vllm \
     --seed 55
 ```
 
-➡️ `example_execution.sh` provides a simple example to run an experiment following the same format as above.
+➡️ `example_execution.sh` provides a simple example to run experiments following the same format as above.
 
 ---
 
@@ -73,7 +75,7 @@ python -m src.main_vllm \
 | `data_name` | HuggingFace dataset identifier | `opencompass/AIME2025` |
 | `temperature` | Sampling temperature (must be > 0) | `0.6` |
 | `entropy_threshold` | Branching threshold (~2.0 for EAGer-init, ~2.4 for EAGer) | `2.2` |
-| `max_sequences` | Maximum parallel sequences (M in paper) | `32` |
+| `max_sequences` | Maximum parallel sequences | `32` |
 | `experiments` | Experiment type to run | `eager` |
 | `output_dir` | Output directory (serves as experiment ID) | See below |
 | `seed` | Random seed for reproducibility | `55` |
@@ -89,11 +91,11 @@ python -m src.main_vllm \
 
 ### Supported Datasets
 
-- `Maxwell-Jia/AIME_2024`
-- `opencompass/AIME2025`
-- `MathArena/hmmt_feb_2025`
-- `fingertap/GPQA-Diamond`
-- `evalplus/humanevalplus`
+- `Maxwell-Jia/AIME_2024` (math)
+- `opencompass/AIME2025` (math)
+- `MathArena/hmmt_feb_2025` (math)
+- `fingertap/GPQA-Diamond` (science)
+- `evalplus/humanevalplus` (code generation)
 
 ### Experiment Types
 
@@ -125,11 +127,84 @@ output_dir="outputs/${model_dir_name}/${data_dir_name}/${timestamp}"
 mkdir -p "$output_dir"
 ```
 
-Then pass it to the script:
+Then pass it to the script using `--output_dir "$output_dir"`.
 
+**Output JSON structure**
+
+Every experiment produces a JSON file stored in the specified `output_dir`.
+This file logs all metadata, configurations, and results of the experiment.
+
+
+<details>
+    <summary>Here is the general structure of the JSON output</summary>
+    ```json
+    {
+        // Experiment metadata and parameters
+        "model_name": "Qwen/Qwen3-4B",
+        "temperature": 0.6,
+        "entropy_threshold": 2.5,
+        "max_sequences": 32,
+        "seed": 55,
+        
+        // Checkpoint state (to allow resuming if interrupted)
+        "status": {
+            "state": "COMPLETED",
+            "completed_sequences": 30,
+            "total_sequences": 30,
+            "progress": "30/30"
+        },
+
+        // Extra information
+        "extra": {
+            "notes": "",
+            "generation_time_so_far (s)": 33938.9826028347
+        },
+        
+        // Automatically computed metrics
+        "results": {
+            "avg_acc": 0.89,
+            "pass_at_1": 0.95,
+            "cons_at_max": 0.68
+        },
+
+        // Entropy-aware generation details for each prompt, "default-generations" for Full Parallel sampling
+        "entropy-aware-generations": [
+            {
+                // original prompt
+                "prompt": "Find the sum of all integer bases $b>9$ for which $17_{b}$ is a divisor of $97_{b}$.",
+                // number of actual sequences -> max at M (Full Parallel or EAGer-init) or M + b (EAGer-adapt or EAGer)
+                "generated_sequences": 1,
+                "target": "70",
+                // extracted answer from \boxed{} env.
+                "extracted_answers": "['70', '70']",
+                // List of all generated reasoning paths
+                "generations": [
+                    "<|im_start|>user\nFind the sum of all integer bases $b>9$ [...] \n### Final Answer\n\n$$\n\\boxed{70}\n$$",
+                    "<|im_start|>user\nFind the sum of all integer bases $b>9$ [...] \nFinal answer is: $$\n\\boxed{70}\n$$"
+                ],
+                // Token-level entropy values for each sequence
+                "entropies": [
+                    "[0.0002, 0.0, 0.0362, 0.1260 [...], -2.0]",
+                    "[-1, -1, -1, 0.1260 [...], -2.0]"      // this is a branched sequence, -1 = token reused from parent sequence
+                ],
+                // Records of all branching events (if any)
+                "recorded_branches": [
+                        "{'seq_idx': 0, 'gen_step': 315, 'auto_selected_token': ' sym', 'entropy': 2.557540054321289, 'entropy_threshold': 2.5, 'man_token_original': ' sym', 'man_token_branch': ' favorable', 'new_seq_idx': 1, 'last_generated_chars': ' number of total possibilities, by considering'}",
+                ]
+            }
+            // ... additional prompts
+        ]
+    }
+    ```
+</details>
+
+Each JSON file is optimized for **human readability** and easy access.
+
+A corresponding `.large` summary file can be generated using:
 ```bash
---output_dir "$output_dir"
+python script_manual_parallel_recapper.py <model_name> <data_name> <timestamp>
 ```
+(see the 🧩 **Evaluation** section below for details).
 
 ### Advanced Parameters
 
