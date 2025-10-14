@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[📜 **Read the paper here** (coming soon) 📜](https://arxiv.org) · [🗣️ I want to cite you 🗣️](#citation)
+[📜 **Read the paper here** (coming soon) 📜](https://arxiv.org/abs/2510.11170) · [🗣️ I want to cite you 🗣️](#citation)
 
 [Daniel Scalena](https://www.danielsc4.it/)<sup>1,2</sup> · [Leonidas Zotos](https://www.rug.nl/staff/l.zotos/?lang=en)<sup>1</sup> · [Elisabetta Fersini](https://en.unimib.it/elisabetta-fersini)<sup>2</sup> · [Malvina Nissim](https://malvinanissim.github.io/)<sup>1</sup> · [Ahmet Üstün](https://ahmetustun.github.io)<sup>3</sup>
 
@@ -249,10 +249,14 @@ python script_manual_parallel_recapper.py Qwen3-4B AIME2025 2025-10-01_12-00-01
 ## Citation
 
 ```bibtex
-@article{scalena2025eager,
-  title={EAGer: Entropy-Aware GEneRation for Adaptive Inference-Time Scaling},
-  author={Scalena, Daniel and Zotos, Leonidas and Fersini, Elisabetta and Nissim, Malvina and Üstün, Ahmet},
-  year={2025}
+@misc{scalena2025eagerentropyawaregenerationadaptive,
+      title={EAGER: Entropy-Aware GEneRation for Adaptive Inference-Time Scaling}, 
+      author={Daniel Scalena and Leonidas Zotos and Elisabetta Fersini and Malvina Nissim and Ahmet Üstün},
+      year={2025},
+      eprint={2510.11170},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2510.11170}, 
 }
 ```
 
