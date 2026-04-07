@@ -14,8 +14,8 @@ from time import gmtime, strftime
 from tqdm import tqdm
 from datasets import load_dataset
 
-from src.entropy_generator_vllm import VLLMGenerator as Generator
-from src.evaluate import compute_average_accuracy, compute_pass_at_1, compute_cons_at_max, extract_boxed_answer
+from eager.entropy_generator_vllm import VLLMGenerator as Generator
+from eager.evaluate import compute_average_accuracy, compute_pass_at_1, compute_cons_at_max, extract_boxed_answer
 
 # set precision to increase performance
 torch.set_float32_matmul_precision('high')  # 'medium' or 'high' for better performance
