@@ -18,5 +18,5 @@ dependencies = [
     "vllm>=0.9.1",
 ]
 
-[tool.setuptools]
-package-dir = {"" = "eager"}
+[tool.setuptools.packages.find]
+where = ["."]
