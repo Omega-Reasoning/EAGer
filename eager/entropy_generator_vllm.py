@@ -29,6 +29,9 @@ class VLLMModelWrapper:
         print(f"Loading model with vLLM: {model_name}")
         download_dir = os.environ.get('HF_HOME', None)
         
+        tensor_parallel_size = torch.cuda.device_count()
+        print(f"Running EAGER on {tensor_parallel_size} GPUs!")
+        
         # Initialize vLLM engine
         self.llm = LLM(
             model=model_name,
